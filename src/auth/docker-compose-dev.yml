@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mysqlsdb:
+    container_name: aime-mysqldb
+    platform: linux/amd64
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=baolong
+      - MYSQL_DATABASE=authdb
+
+  authapi:
+    container_name: aime-service
+    platform: linux/amd64
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - mysqlsdb
+    command: ["/usr/bin/wait-for-it", "mysqlsdb:3306", "-t", "60"]
+    ports:
+      - 80:80
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=baolong
+      - MYSQL_DB=authdb
+      - MYSQL_HOST=mysqlsdb
+      - MYSQL_PORT=3306
+      - SECRET_KEY=TheDefaultSecretKeyWithNoContent
+      - LOGLEVEL=DEBUG
+    entrypoint: /bin/sh -c "python3 main.py"
