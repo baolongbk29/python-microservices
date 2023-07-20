@@ -1,0 +1,39 @@
+pipeline {
+    
+    agent any 
+    
+    environment {
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    
+    stages {
+        
+        stage('Checkout'){
+           steps {
+                git credentialsId: 'github', 
+                url: 'https://github.com/baolongbk29/python-microservices.git',
+                branch: 'master'
+           }
+        }
+
+        stage('Build Docker'){
+            steps{
+                script{
+                    sh '''
+                    echo 'Buid Docker Image'
+                    docker build -t longlam071/auth-api:${BUILD_NUMBER} ./src/auth/
+                    '''
+                }
+            }
+        }
+
+         stage('Push Docker Image') {
+            steps {
+                sh '''
+                docker login -u longlam071 -p dckr_pat_nvlfMuZtzCgQ5-YPxfWdBxLoIxU
+                docker push longlam071/auth-api:${BUILD_NUMBER}
+                '''
+            }
+        }
+    }
+}
