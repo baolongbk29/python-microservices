@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: longlam071/auth-api
+          image: longlam071/auth-api:1
           ports:
             - containerPort: 5000
           envFrom:
