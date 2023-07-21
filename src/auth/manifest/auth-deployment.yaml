@@ -5,7 +5,7 @@ metadata:
   labels:
     app: auth
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: auth
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: longlam071/auth-api:1
+          image: longlam071/auth-api:11
           ports:
             - containerPort: 5000
           envFrom:
