@@ -1,0 +1,22 @@
+version: 1.0
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/aws:2023.04.1
+    steps:
+      - checkout
+      - run:
+          name: Lets deploy thsi application
+          command: |
+            print("test succesfully")
+
+
+
+workflows:
+  Develop:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: main
